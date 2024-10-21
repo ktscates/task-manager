@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: ['main']
+    branches: ["main"]
   pull_request:
-    branches: ['main']
+    branches: ["main"]
 
 jobs:
   build:
@@ -24,10 +24,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-      - run: npm i
-      - run: npm run build
-      - run: npm run test
+          cache: "yarn"
+      - run: yarn
+      - run: yarn run build
+      - run: yarnp run test
 
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.AUTH_ID }}
