@@ -1,7 +1,7 @@
 import React from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoMoonOutline } from "react-icons/io5";
-import { LuSunDim } from "react-icons/lu";
+// import { LuSunDim } from "react-icons/lu";
 import { GoBell } from "react-icons/go";
 
 const Header = () => {
