@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
+import { getFirestore, doc, setDoc } from "firebase/firestore";
 import { auth } from "../firebase";
 import {
   User,
@@ -8,15 +9,18 @@ import {
   createUserWithEmailAndPassword,
   signInWithPopup,
   GoogleAuthProvider,
+  updateProfile,
 } from "firebase/auth";
 
 interface AuthContextType {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string) => Promise<void>;
+  register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
   signInWithGoogle: () => Promise<void>;
 }
+
+const db = getFirestore();
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -41,20 +45,53 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser(userCredential.user);
   };
 
-  const register = async (email: string, password: string) => {
-    const userCredential = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password
-    );
-    setUser(userCredential.user);
+  // Update the register function in your AuthContext
+
+  const register = async (email: string, password: string, name: string) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
+
+      // Update the user's display name using updateProfile
+      await updateProfile(user, {
+        displayName: name,
+      });
+
+      setUser(user);
+
+      // Save the user data to Firestore with the display name
+      await setDoc(doc(db, "users", user.uid), {
+        uid: user.uid,
+        email: user.email,
+        displayName: name,
+      });
+    } catch (error) {
+      console.error("Error during registration:", error);
+    }
   };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
     try {
       const result = await signInWithPopup(auth, provider);
-      setUser(result.user);
+      const user = result.user;
+      setUser(user);
+
+      // Save the user data to Firestore if it doesn't exist
+      await setDoc(
+        doc(db, "users", user.uid),
+        {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          image: user.photoURL,
+        },
+        { merge: true }
+      ); // Use merge to avoid overwriting existing data
     } catch (error) {
       console.error("Google Sign-In failed", error);
     }

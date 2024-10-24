@@ -3,7 +3,7 @@ import React from "react";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { BrowserRouter as Router } from "react-router-dom"; // Import Router for useNavigate
 import Auth from "../pages/Auth";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "../context/AuthContext";
 
 // Mock the useAuth hook
 jest.mock("../hooks/useAuth");
