@@ -19,7 +19,7 @@ const Auth = () => {
     e.preventDefault();
     try {
       if (isRegistering) {
-        await register(email, password, name); // Pass name to the register function
+        await register(email, password, name);
         showToast(t("auth.registerSuccess"), "success");
       } else {
         await login(email, password);
@@ -49,10 +49,10 @@ const Auth = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-backAuth dark:bg-gray-800">
+    <div className="flex items-center justify-center min-h-screen bg-backAuth dark:bg-bgDark">
       <form
         onSubmit={handleSubmit}
-        className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg max-w-lg"
+        className="bg-white dark:bg-backgroundDark p-6 rounded-xl shadow-3xl max-w-lg"
       >
         <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">
           {isRegistering ? t("auth.registerTitle") : t("auth.loginTitle")}
@@ -63,7 +63,7 @@ const Auth = () => {
             placeholder={t("auth.namePlaceholder")}
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full p-2 mb-6 border-b border-backAuth dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none"
+            className="w-full p-2 mb-6 border-b border-backAuth dark:bg-gray-800 dark:border-primary dark:bg-searchDark dark:text-white focus:outline-none"
             required
           />
         )}
@@ -72,7 +72,7 @@ const Auth = () => {
           placeholder={t("auth.emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 mb-6 border-b border-backAuth dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none"
+          className="w-full p-2 mb-6 border-b border-backAuth dark:bg-gray-800 dark:border-primary dark:bg-searchDark dark:text-white focus:outline-none"
           required
         />
         <input
@@ -80,7 +80,7 @@ const Auth = () => {
           placeholder={t("auth.passwordPlaceholder")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 mb-10 border-b border-backAuth dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none"
+          className="w-full p-2 mb-10 border-b border-backAuth dark:bg-gray-800 dark:border-primary dark:bg-searchDark dark:text-white focus:outline-none"
           required
         />
         <div className="flex gap-4">
@@ -93,7 +93,7 @@ const Auth = () => {
           <button
             type="button"
             onClick={handleGoogleLogin}
-            className="w-full flex gap-2 items-center bg-gray bg-opacity-25 text-black p-2 rounded hover:bg-opacity-40"
+            className="w-full flex gap-2 items-center bg-gray bg-opacity-25 text-black dark:text-white p-2 rounded hover:bg-opacity-40"
           >
             <FcGoogle size={22} />
             {isRegistering

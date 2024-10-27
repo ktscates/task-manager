@@ -60,8 +60,8 @@ const TaskNav: React.FC<TaskNavProps> = ({
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-5 mt-5 flex justify-between items-center">
-      <div className="flex gap-4">
+    <div className="w-full bg-white dark:bg-searchDark rounded-3xl shadow-sm lg:p-5 p-3 mt-5 flex lg:flex-row flex-col gap-2 justify-between lg:items-center">
+      <div className="lg:flex lg:flex-row flex-col lg:items-center lg:justify-between lg:gap-4">
         <button
           onClick={() => handleFilterClick("all")}
           className={`px-4 py-2 rounded-lg font-semibold focus:outline-none ${

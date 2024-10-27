@@ -5,7 +5,7 @@ import React, {
   ReactNode,
   useEffect,
 } from "react";
-import { db, storage } from "../firebase"; // Import Firestore and Storage
+import { db, storage } from "../firebase";
 import {
   collection,
   doc,
@@ -23,9 +23,9 @@ interface Task {
   title: string;
   description: string;
   image: string;
-  members: string[]; // List of assigned member IDs
+  members: string[];
   comments: { id: string; text: string; author: string }[];
-  status: "todo" | "in-progress" | "completed"; // New status field
+  status: "todo" | "in-progress" | "completed";
 }
 
 interface TaskContextType {
@@ -41,7 +41,7 @@ interface TaskContextType {
   ) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   getTaskById: (id: string) => Task | undefined;
-  getTasks: () => Promise<Task[]>; // New function to get all tasks
+  getTasks: () => Promise<Task[]>;
   addComment: (
     taskId: string,
     comment: { id: string; text: string; author: string }
@@ -55,7 +55,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  // Fetch tasks from Firestore on component mount
+  // Fetch all tasks from Firestore
   useEffect(() => {
     const unsubscribe = onSnapshot(collection(db, "tasks"), (snapshot) => {
       const tasksData = snapshot.docs.map((doc) => ({
@@ -75,7 +75,6 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
   ) => {
     let imageUrl = "";
 
-    // If an image is provided, upload it to Firebase Storage
     if (imageFile) {
       const imageRef = ref(storage, `tasks/${Date.now()}-${imageFile.name}`);
       await uploadBytes(imageRef, imageFile);
@@ -85,7 +84,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
     const newTask = {
       ...task,
       image: imageUrl,
-      status: "todo", // Set default status to "todo"
+      status: "todo",
       comments: [],
     };
 
@@ -100,7 +99,6 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
   ) => {
     let imageUrl = updatedTask.image || "";
 
-    // If a new image is provided, upload it to Firebase Storage
     if (imageFile) {
       const imageRef = ref(storage, `tasks/${Date.now()}-${imageFile.name}`);
       await uploadBytes(imageRef, imageFile);
@@ -133,11 +131,11 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
     taskId: string,
     comment: { id: string; text: string; author: string }
   ) => {
-    const taskDocRef = doc(db, "tasks", taskId); // Get a reference to the task document
+    const taskDocRef = doc(db, "tasks", taskId);
 
     // Fetch the current task to get its comments
-    const taskSnapshot = await getDoc(taskDocRef); // Use getDoc for a single document
-    const currentTask = taskSnapshot.data() as Task; // Access the document's data
+    const taskSnapshot = await getDoc(taskDocRef);
+    const currentTask = taskSnapshot.data() as Task;
 
     // Add the new comment to the existing comments
     const updatedComments = [...(currentTask?.comments || []), comment];
@@ -157,7 +155,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
         deleteTask,
         getTaskById,
         getTasks,
-        addComment, // Expose addComment function
+        addComment,
       }}
     >
       {children}

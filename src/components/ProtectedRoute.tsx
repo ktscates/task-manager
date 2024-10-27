@@ -6,7 +6,6 @@ const ProtectedRoute = ({ children }: { children: React.ReactElement }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    // Show a loading spinner or placeholder until the authentication state is resolved
     return <div>Loading...</div>;
   }
 

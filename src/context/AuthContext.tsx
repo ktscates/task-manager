@@ -21,7 +21,7 @@ import {
 interface AuthContextType {
   user: User | null;
   users: User[] | null;
-  loading: boolean; // Add loading state
+  loading: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -37,15 +37,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true); // Set loading to true initially
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsers = async () => {
       const usersCollection = collection(db, "users");
       const usersSnapshot = await getDocs(usersCollection);
       const usersList: User[] = usersSnapshot.docs.map((doc) => ({
-        uid: doc.id, // Make sure this matches your User type
-        ...(doc.data() as Omit<User, "uid">), // Spread the remaining data and cast to the appropriate type
+        uid: doc.id,
+        ...(doc.data() as Omit<User, "uid">),
       }));
       setUsers(usersList);
     };
@@ -56,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      setLoading(false); // Set loading to false once the user state is set
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);

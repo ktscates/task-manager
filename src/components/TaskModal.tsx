@@ -83,7 +83,6 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const handleMemberChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedId = event.target.value;
     setMembers((prevMembers) => {
-      // Add member if not already in the list
       if (!prevMembers.includes(selectedId)) {
         return [...prevMembers, selectedId];
       }
@@ -93,8 +92,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-lg w-full">
-        <h2 className="text-2xl mb-4">
+      <div className="bg-white  dark:bg-backgroundDark p-8 rounded-lg shadow-lg max-w-lg w-full">
+        <h2 className="text-2xl mb-4 dark:text-white">
           {taskId ? t("taskModal.editTask") : t("taskModal.newTask")}
         </h2>
         <input
@@ -102,25 +101,27 @@ const TaskModal: React.FC<TaskModalProps> = ({
           placeholder={t("taskModal.titlePlaceholder")}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full dark:bg-searchDark placeholder:text-gray dark:border-none dark:text-white dark:focus:outline-none focus:outline-none p-2 mb-4 border border-gray rounded"
         />
         <textarea
           placeholder={t("taskModal.descriptionPlaceholder")}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
-          className="w-full p-2 mb-4 border rounded"
+          className="w-full dark:bg-searchDark placeholder:text-gray dark:border-none dark:text-white dark:focus:outline-none focus:outline-none p-2 mb-4 border border-gray rounded"
         ></textarea>
         {/* Image Upload */}
-        <div className="mb-4">
+        <div className="mb-4 dark:text-white">
           <label className="block mb-2">{t("taskModal.imageLabel")}</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>
-        {/* Members Assignment Dropdown */}
+        {/* Members Dropdown */}
         <div className="mb-4">
-          <label className="block mb-2">{t("taskModal.assignMembers")}</label>
+          <label className="block mb-2 dark:text-white">
+            {t("taskModal.assignMembers")}
+          </label>
           <select
             onChange={handleMemberChange}
-            className="w-full p-2 border rounded"
+            className="w-full p-2 dark:bg-searchDark placeholder:text-gray border-none dark:text-white dark:focus:outline-none border rounded"
           >
             <option value="">{t("taskModal.selectMember")}</option>
             {availableMembers.map((member) => (
@@ -130,7 +131,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             ))}
           </select>
           {/* Display selected members */}
-          <div className="mt-2">
+          <div className="mt-2 dark:text-white">
             <strong>{t("taskModal.assignedMembers")}:</strong>{" "}
             {members.join(", ")}
           </div>
@@ -141,7 +142,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             onChange={(e) =>
               setStatus(e.target.value as "todo" | "in-progress" | "completed")
             }
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-2 dark:bg-searchDark placeholder:text-gray border-none dark:text-white dark:focus:outline-none mb-4 rounded"
           >
             <option value="todo">{t("taskModal.status.todo")}</option>
             <option value="in-progress">
@@ -152,7 +153,9 @@ const TaskModal: React.FC<TaskModalProps> = ({
         </div>
         {/* Comments Section */}
         <div className="mb-4">
-          <label className="block mb-2">{t("taskModal.comments")}</label>
+          <label className="block mb-2 dark:text-white">
+            {t("taskModal.comments")}
+          </label>
           <ul className="mb-2">
             {comments.map((c) => (
               <li key={c.id} className="border-b p-1">
@@ -165,7 +168,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             placeholder={t("taskModal.addCommentPlaceholder")}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            className="w-full p-2 mb-2 border rounded"
+            className="w-full dark:bg-searchDark placeholder:text-gray border-none dark:text-white dark:focus:outline-none p-2 mb-2 rounded"
           />
           <button
             onClick={handleAddComment}
@@ -177,7 +180,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
         <div className="flex justify-end gap-2">
           <button
             onClick={onClose}
-            className="bg-gray-500 text-black p-2 rounded"
+            className="bg-red-500 text-white p-2 rounded"
           >
             {t("taskModal.cancelButton")}
           </button>

@@ -13,10 +13,10 @@ const TaskManager = () => {
   const { tasks, deleteTask } = useTask();
   const [selectedTaskId, setSelectedTaskId] = useState<string | undefined>(
     undefined
-  ); // Change to undefined
+  );
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState<string>("all");
-  const [isAscending, setIsAscending] = useState(true); // State to manage sort order
+  const [isAscending, setIsAscending] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleFilterChange = (filter: string) => {
@@ -24,12 +24,12 @@ const TaskManager = () => {
   };
 
   const handleSortToggle = () => {
-    setIsAscending((prev) => !prev); // Toggle the sort order
+    setIsAscending((prev) => !prev);
   };
 
   const handleEdit = (task: any) => {
-    setSelectedTaskId(task.id); // Set the ID of the task to be edited
-    setIsModalOpen(true); // Open the modal
+    setSelectedTaskId(task.id);
+    setIsModalOpen(true);
   };
 
   const handleDelete = async (taskId: string) => {
@@ -37,7 +37,7 @@ const TaskManager = () => {
     console.log("Deleted task with ID:", taskId);
   };
 
-  // Filter and sort tasks based on filter, search term, and sort order
+  // Filter using search term or status and sort tasks,
   const filteredTasks = tasks
     .filter((task) => {
       if (selectedFilter === "all") return true;
@@ -56,7 +56,7 @@ const TaskManager = () => {
   });
 
   return (
-    <div className="flex h-screen bg-gray bg-opacity-15 dark:bg-gray-900">
+    <div className="flex min-h-screen bg-gray bg-opacity-15 dark:bg-bgDark">
       <Sidebar />
       <div className="flex-1 flex flex-col">
         <Header onSearchChange={setSearchTerm} />
@@ -66,7 +66,7 @@ const TaskManager = () => {
             onSortToggle={handleSortToggle}
             isAscending={isAscending}
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:flex flex-wrap gap-6 mt-6">
+          <div className="grid grid-cols-1 md:flex md:flex-wrap gap-6 mt-6">
             {sortedTasks.map((task) => (
               <TaskCard
                 key={task.id}
@@ -78,15 +78,15 @@ const TaskManager = () => {
           </div>
         </div>
       </div>
-      {/* Render the TaskModal when it is open */}
+
       {isModalOpen && (
         <TaskModal
           taskId={selectedTaskId}
           onClose={() => {
             setIsModalOpen(false);
-            setSelectedTaskId(undefined); // Reset the selected task ID
+            setSelectedTaskId(undefined);
           }}
-          availableMembers={[]} // Provide available members here
+          availableMembers={[]}
         />
       )}
     </div>
