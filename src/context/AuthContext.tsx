@@ -1,5 +1,11 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { getFirestore, doc, setDoc } from "firebase/firestore";
+import {
+  getFirestore,
+  doc,
+  setDoc,
+  collection,
+  getDocs,
+} from "firebase/firestore";
 import { auth } from "../firebase";
 import {
   User,
@@ -14,6 +20,8 @@ import {
 
 interface AuthContextType {
   user: User | null;
+  users: User[] | null;
+  loading: boolean; // Add loading state
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
   logout: () => Promise<void>;
@@ -28,10 +36,27 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
+  const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState(true); // Set loading to true initially
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      const usersCollection = collection(db, "users");
+      const usersSnapshot = await getDocs(usersCollection);
+      const usersList: User[] = usersSnapshot.docs.map((doc) => ({
+        uid: doc.id, // Make sure this matches your User type
+        ...(doc.data() as Omit<User, "uid">), // Spread the remaining data and cast to the appropriate type
+      }));
+      setUsers(usersList);
+    };
+
+    fetchUsers();
+  }, []);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
+      setLoading(false); // Set loading to false once the user state is set
     });
     return () => unsubscribe();
   }, []);
@@ -45,56 +70,37 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     setUser(userCredential.user);
   };
 
-  // Update the register function in your AuthContext
-
   const register = async (email: string, password: string, name: string) => {
-    try {
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
-      const user = userCredential.user;
-
-      // Update the user's display name using updateProfile
-      await updateProfile(user, {
-        displayName: name,
-      });
-
-      setUser(user);
-
-      // Save the user data to Firestore with the display name
-      await setDoc(doc(db, "users", user.uid), {
-        uid: user.uid,
-        email: user.email,
-        displayName: name,
-      });
-    } catch (error) {
-      console.error("Error during registration:", error);
-    }
+    const userCredential = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+    const user = userCredential.user;
+    await updateProfile(user, { displayName: name });
+    setUser(user);
+    await setDoc(doc(db, "users", user.uid), {
+      uid: user.uid,
+      email: user.email,
+      displayName: name,
+    });
   };
 
   const signInWithGoogle = async () => {
     const provider = new GoogleAuthProvider();
-    try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-      setUser(user);
-
-      // Save the user data to Firestore if it doesn't exist
-      await setDoc(
-        doc(db, "users", user.uid),
-        {
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          image: user.photoURL,
-        },
-        { merge: true }
-      ); // Use merge to avoid overwriting existing data
-    } catch (error) {
-      console.error("Google Sign-In failed", error);
-    }
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    setUser(user);
+    await setDoc(
+      doc(db, "users", user.uid),
+      {
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        image: user.photoURL,
+      },
+      { merge: true }
+    );
   };
 
   const logout = async () => {
@@ -104,9 +110,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <AuthContext.Provider
-      value={{ user, login, register, logout, signInWithGoogle }}
+      value={{
+        user,
+        users,
+        loading,
+        login,
+        register,
+        logout,
+        signInWithGoogle,
+      }}
     >
-      {children}
+      {!loading && children}
     </AuthContext.Provider>
   );
 };

@@ -3,11 +3,13 @@ import { Link } from "react-router-dom";
 import { FaRegUser, FaRegFileLines } from "react-icons/fa6";
 import { GrHomeRounded } from "react-icons/gr";
 import { HiOutlineEnvelope, HiOutlineFolderMinus } from "react-icons/hi2";
-import { TbCircleDashedPlus } from "react-icons/tb";
 import { IoSettingsOutline } from "react-icons/io5";
 import logo from "../logo.svg";
+import { useAuth } from "../context/AuthContext";
 
 const Sidebar = () => {
+  const { users } = useAuth();
+
   return (
     <aside className="w-20 bg-white dark:bg-gray-800 shadow h-screen relative">
       <nav className="mt-24 flex flex-col justify-between items-end">
@@ -46,27 +48,33 @@ const Sidebar = () => {
           </li>
         </ul>
 
-        <ul className="flex flex-col gap-4 items-center py-8 border-b border-backAuth">
-          <li>
+        <ul className="flex flex-col gap-2 items-center py-8 border-b border-backAuth">
+          {users?.map((user) => (
+            <li key={user.uid}>
+              <Link
+                to="/tasks"
+                className="flex items-center px-4 py-2 mt-2 text-gray dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md"
+              >
+                <img
+                  className="rounded-full border border-gray w-8 h-8 object-cover"
+                  src={user.photoURL! || logo}
+                  alt={user.displayName!}
+                />
+              </Link>
+            </li>
+          ))}
+          {/* <li>
             <Link
               to=""
-              className="flex items-center px-4 py-2 mt-2 text-gray dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md"
+              className=
             >
               <img
-                className="rounded-full bg-gray w-10 h-10 object-cover"
-                src={logo}
+                className="rounded-full w-10 h-10 object-cover"
+                src={user?.photoURL || logo}
                 alt="logo"
               />
             </Link>
-          </li>
-          <li>
-            <Link
-              to=""
-              className="flex items-center px-4 py-2 mt-2 text-gray dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-md"
-            >
-              <TbCircleDashedPlus size={26} />
-            </Link>
-          </li>
+          </li> */}
         </ul>
 
         <ul className="flex flex-col gap-4 items-center absolute bottom-0 pb-8">

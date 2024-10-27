@@ -1,25 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { BsFilterLeft } from "react-icons/bs";
 import { IoMdAdd } from "react-icons/io";
-import TaskModal from "./TaskModal"; // Import the TaskModal component
+import TaskModal from "./TaskModal";
 import { getFirestore, collection, getDocs } from "firebase/firestore";
+import { useTask } from "../context/TaskContext";
+import { useTranslation } from "react-i18next";
 
-// Firestore initialization
 const db = getFirestore();
 
-// Define a type for the members
 interface Member {
   id: string;
   email: string;
   displayName: string;
 }
 
-const TaskNav = () => {
-  // State to control modal visibility
+interface TaskNavProps {
+  onFilterChange: (filter: string) => void;
+  onSortToggle: () => void;
+  isAscending: boolean;
+}
+
+const TaskNav: React.FC<TaskNavProps> = ({
+  onFilterChange,
+  onSortToggle,
+  isAscending,
+}) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [availableMembers, setAvailableMembers] = useState<Member[]>([]);
+  const [selectedFilter, setSelectedFilter] = useState<string>("all");
+  const { tasks } = useTask();
+  const { t } = useTranslation();
 
-  // Function to fetch users from Firestore
   useEffect(() => {
     const fetchMembers = async () => {
       try {
@@ -36,53 +47,96 @@ const TaskNav = () => {
       }
     };
 
-    fetchMembers(); // Call function to fetch users
+    fetchMembers();
   }, []);
+
+  const todos = tasks.filter((task) => task.status === "todo");
+  const progress = tasks.filter((task) => task.status === "in-progress");
+  const completed = tasks.filter((task) => task.status === "completed");
+
+  const handleFilterClick = (filter: string) => {
+    setSelectedFilter(filter);
+    onFilterChange(filter);
+  };
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-3xl shadow-sm p-5 mt-5 flex justify-between items-center">
-      {/* Tabs */}
       <div className="flex gap-4">
-        <button className="px-4 py-2 rounded-lg text-primary font-semibold hover:bg-primary focus:outline-none">
-          All Tasks
+        <button
+          onClick={() => handleFilterClick("all")}
+          className={`px-4 py-2 rounded-lg font-semibold focus:outline-none ${
+            selectedFilter === "all"
+              ? "text-primary"
+              : "text-gray dark:text-white dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          }`}
+        >
+          {t("taskNav.allTasks")}
           <span className="p-2 rounded-md bg-primary bg-opacity-10 ml-2">
-            23
+            {tasks.length}
           </span>
         </button>
-        <button className="px-4 py-2 rounded-lg text-gray font-semibold dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none">
-          To do{" "}
-          <span className="p-2 rounded-md bg-gray bg-opacity-10 ml-2">3</span>
+        <button
+          onClick={() => handleFilterClick("todo")}
+          className={`px-4 py-2 rounded-lg font-semibold focus:outline-none ${
+            selectedFilter === "todo"
+              ? "text-primary"
+              : "text-gray dark:text-white dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          }`}
+        >
+          {t("taskNav.toDo")}
+          <span className="p-2 rounded-md bg-gray bg-opacity-10 ml-2">
+            {todos.length}
+          </span>
         </button>
-        <button className="px-4 py-2 rounded-lg text-gray font-semibold dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none">
-          In Progress
-          <span className="p-2 rounded-md bg-gray bg-opacity-10 ml-2">6</span>
+        <button
+          onClick={() => handleFilterClick("in-progress")}
+          className={`px-4 py-2 rounded-lg font-semibold focus:outline-none ${
+            selectedFilter === "in-progress"
+              ? "text-primary"
+              : "text-gray dark:text-white dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          }`}
+        >
+          {t("taskNav.inProgress")}
+          <span className="p-2 rounded-md bg-gray bg-opacity-10 ml-2">
+            {progress.length}
+          </span>
         </button>
-        <button className="px-4 py-2 rounded-lg text-gray font-semibold dark:bg-gray-700 dark:text-white hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none">
-          Completed
-          <span className="p-2 rounded-md bg-gray bg-opacity-10 ml-2">14</span>
+        <button
+          onClick={() => handleFilterClick("completed")}
+          className={`px-4 py-2 rounded-lg font-semibold focus:outline-none ${
+            selectedFilter === "completed"
+              ? "text-primary"
+              : "text-gray dark:text-white dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600"
+          }`}
+        >
+          {t("taskNav.completed")}
+          <span className="p-2 rounded-md bg-gray bg-opacity-10 ml-2">
+            {completed.length}
+          </span>
         </button>
       </div>
 
-      {/* Buttons */}
       <div className="flex gap-4">
-        <button className="px-4 py-2 border border-gray border-opacity-30 rounded-lg text-gray flex gap-3 items-center font-semibold focus:outline-none">
+        <button
+          onClick={onSortToggle}
+          className="px-4 py-2 border border-gray border-opacity-30 rounded-lg text-gray flex gap-3 items-center font-semibold focus:outline-none"
+        >
           <BsFilterLeft size={24} />
-          Filter & Sort
+          {t("taskNav.filterSort")}
         </button>
         <button
-          onClick={() => setIsModalOpen(true)} // Open modal on click
+          onClick={() => setIsModalOpen(true)}
           className="px-4 py-2 border border-gray border-opacity-30 rounded-lg text-gray flex gap-3 items-center font-semibold focus:outline-none"
         >
           <IoMdAdd size={24} />
-          New Task
+          {t("taskNav.newTask")}
         </button>
       </div>
 
-      {/* Render the TaskModal when isModalOpen is true */}
       {isModalOpen && (
         <TaskModal
-          onClose={() => setIsModalOpen(false)} // Close modal handler
-          availableMembers={availableMembers} // Pass available members to modal
+          onClose={() => setIsModalOpen(false)}
+          availableMembers={availableMembers}
         />
       )}
     </div>

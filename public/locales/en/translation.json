@@ -1,0 +1,74 @@
+{
+  "header": {
+    "search_placeholder": "Search",
+    "language_en": "EN",
+    "language_fr": "FR"
+  },
+
+  "taskNav": {
+    "allTasks": "All Tasks",
+    "toDo": "To do",
+    "inProgress": "In Progress",
+    "completed": "Completed",
+    "filterSort": "Filter & Sort",
+    "newTask": "New Task"
+  },
+
+  "taskModal": {
+    "editTask": "Edit Task",
+    "newTask": "New Task",
+    "titlePlaceholder": "Title",
+    "descriptionPlaceholder": "Description",
+    "imageLabel": "Image (Optional)",
+    "assignMembers": "Assign Members",
+    "selectMember": "Select a member",
+    "assignedMembers": "Assigned Members:",
+    "status": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "comments": "Comments",
+    "addCommentPlaceholder": "Add a comment",
+    "addCommentButton": "Add Comment",
+    "cancelButton": "Cancel",
+    "saveButton": "Save",
+    "successMessage": {
+      "add": "Task added successfully!",
+      "update": "Task updated successfully!"
+    },
+    "errorMessage": "Failed to save task. Please try again."
+  },
+
+  "taskCard": {
+    "status": {
+      "todo": "To Do",
+      "inProgress": "In Progress",
+      "completed": "Completed"
+    },
+    "edit": "Edit",
+    "delete": "Delete"
+  },
+
+  "auth": {
+    "registerSuccess": "Registration successful!",
+    "loginSuccess": "Login successful!",
+    "registerFail": "Registration failed. Please try again.",
+    "loginFail": "Login failed. Please check your credentials.",
+    "googleLoginSuccess": "Google login successful!",
+    "googleLoginFail": "Google login failed. Please try again.",
+    "registerTitle": "Register",
+    "loginTitle": "Login",
+    "namePlaceholder": "Name",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "registerButton": "Register",
+    "loginButton": "Login",
+    "registerWithGoogle": "Register with Google",
+    "loginWithGoogle": "Login with Google",
+    "haveAccount": "Already have an account?",
+    "noAccount": "Don't have an account?",
+    "toggleRegister": "Register",
+    "toggleLogin": "Login"
+  }
+}

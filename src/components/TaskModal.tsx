@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useTask } from "../context/TaskContext";
 import { useToast } from "../context/ToastContext"; // Import the useToast hook
+import { useTranslation } from "react-i18next";
 
 interface TaskModalProps {
   taskId?: string;
@@ -16,6 +17,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
   const { addTask, updateTask, getTaskById } = useTask();
   const { showToast } = useToast(); // Use the useToast hook
   const task = taskId ? getTaskById(taskId) : null;
+  const { t } = useTranslation();
 
   const [title, setTitle] = useState(task?.title || "");
   const [description, setDescription] = useState(task?.description || "");
@@ -44,18 +46,20 @@ const TaskModal: React.FC<TaskModalProps> = ({
           { title, description, members, comments, status },
           imageFile || undefined
         );
-        showToast("Task updated successfully!", "success"); // Success message for update
+        onClose();
+        showToast(t("taskModal.successMessage.update"), "success");
       } else {
         await addTask(
           { title, description, members, comments, status },
           imageFile || undefined
         );
-        showToast("Task added successfully!", "success"); // Success message for add
+        onClose();
+        showToast(t("taskModal.successMessage.add"), "success");
       }
       onClose();
     } catch (error) {
       console.error("Error saving task:", error);
-      showToast("Failed to save task. Please try again.", "error"); // Error message for failure
+      showToast(t("taskModal.errorMessage"), "error");
     }
   };
 
@@ -88,35 +92,37 @@ const TaskModal: React.FC<TaskModalProps> = ({
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-lg w-full">
-        <h2 className="text-2xl mb-4">{taskId ? "Edit Task" : "New Task"}</h2>
+        <h2 className="text-2xl mb-4">
+          {taskId ? t("taskModal.editTask") : t("taskModal.newTask")}
+        </h2>
         <input
           type="text"
-          placeholder="Title"
+          placeholder={t("taskModal.titlePlaceholder")}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
         />
         <textarea
-          placeholder="Description"
+          placeholder={t("taskModal.descriptionPlaceholder")}
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
         ></textarea>
         {/* Image Upload */}
         <div className="mb-4">
-          <label className="block mb-2">Image (Optional)</label>
+          <label className="block mb-2">{t("taskModal.imageLabel")}</label>
           <input type="file" accept="image/*" onChange={handleImageChange} />
         </div>
         {/* Members Assignment Dropdown */}
         <div className="mb-4">
-          <label className="block mb-2">Assign Members</label>
+          <label className="block mb-2">{t("taskModal.assignMembers")}</label>
           <select
             onChange={handleMemberChange}
             className="w-full p-2 border rounded"
           >
-            <option value="">Select a member</option>
+            <option value="">{t("taskModal.selectMember")}</option>
             {availableMembers.map((member) => (
               <option key={member.id} value={member.id}>
                 {member.displayName}
@@ -125,7 +131,8 @@ const TaskModal: React.FC<TaskModalProps> = ({
           </select>
           {/* Display selected members */}
           <div className="mt-2">
-            <strong>Assigned Members:</strong> {members.join(", ")}
+            <strong>{t("taskModal.assignedMembers")}:</strong>{" "}
+            {members.join(", ")}
           </div>
         </div>
         <div>
@@ -136,14 +143,16 @@ const TaskModal: React.FC<TaskModalProps> = ({
             }
             className="w-full p-2 mb-4 border rounded"
           >
-            <option value="todo">To Do</option>
-            <option value="in-progress">In Progress</option>
-            <option value="completed">Completed</option>
+            <option value="todo">{t("taskModal.status.todo")}</option>
+            <option value="in-progress">
+              {t("taskModal.status.inProgress")}
+            </option>
+            <option value="completed">{t("taskModal.status.completed")}</option>
           </select>
         </div>
         {/* Comments Section */}
         <div className="mb-4">
-          <label className="block mb-2">Comments</label>
+          <label className="block mb-2">{t("taskModal.comments")}</label>
           <ul className="mb-2">
             {comments.map((c) => (
               <li key={c.id} className="border-b p-1">
@@ -153,7 +162,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
           </ul>
           <input
             type="text"
-            placeholder="Add a comment"
+            placeholder={t("taskModal.addCommentPlaceholder")}
             value={comment}
             onChange={(e) => setComment(e.target.value)}
             className="w-full p-2 mb-2 border rounded"
@@ -162,7 +171,7 @@ const TaskModal: React.FC<TaskModalProps> = ({
             onClick={handleAddComment}
             className="bg-blue-500 text-white p-2 rounded"
           >
-            Add Comment
+            {t("taskModal.addCommentButton")}
           </button>
         </div>
         <div className="flex justify-end gap-2">
@@ -170,13 +179,13 @@ const TaskModal: React.FC<TaskModalProps> = ({
             onClick={onClose}
             className="bg-gray-500 text-black p-2 rounded"
           >
-            Cancel
+            {t("taskModal.cancelButton")}
           </button>
           <button
             onClick={handleSave}
             className="bg-green-500 text-white p-2 rounded"
           >
-            Save
+            {t("taskModal.saveButton")}
           </button>
         </div>
       </div>

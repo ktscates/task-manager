@@ -11,6 +11,7 @@ import {
   doc,
   getDocs,
   addDoc,
+  getDoc,
   updateDoc,
   deleteDoc,
   onSnapshot,
@@ -41,6 +42,10 @@ interface TaskContextType {
   deleteTask: (id: string) => Promise<void>;
   getTaskById: (id: string) => Task | undefined;
   getTasks: () => Promise<Task[]>; // New function to get all tasks
+  addComment: (
+    taskId: string,
+    comment: { id: string; text: string; author: string }
+  ) => Promise<void>;
 }
 
 const TaskContext = createContext<TaskContextType | undefined>(undefined);
@@ -81,6 +86,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
       ...task,
       image: imageUrl,
       status: "todo", // Set default status to "todo"
+      comments: [],
     };
 
     await addDoc(collection(db, "tasks"), newTask);
@@ -123,6 +129,25 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
     })) as Task[];
   };
 
+  const addComment = async (
+    taskId: string,
+    comment: { id: string; text: string; author: string }
+  ) => {
+    const taskDocRef = doc(db, "tasks", taskId); // Get a reference to the task document
+
+    // Fetch the current task to get its comments
+    const taskSnapshot = await getDoc(taskDocRef); // Use getDoc for a single document
+    const currentTask = taskSnapshot.data() as Task; // Access the document's data
+
+    // Add the new comment to the existing comments
+    const updatedComments = [...(currentTask?.comments || []), comment];
+
+    // Update the task with the new comments array
+    await updateDoc(taskDocRef, {
+      comments: updatedComments,
+    });
+  };
+
   return (
     <TaskContext.Provider
       value={{
@@ -132,6 +157,7 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
         deleteTask,
         getTaskById,
         getTasks,
+        addComment, // Expose addComment function
       }}
     >
       {children}

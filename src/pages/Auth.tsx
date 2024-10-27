@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { useToast } from "../context/ToastContext"; // Import the useToast hook
+import { useTranslation } from "react-i18next";
 
 const Auth = () => {
   const { login, register, signInWithGoogle } = useAuth();
@@ -12,16 +13,17 @@ const Auth = () => {
   const [name, setName] = useState(""); // New state for the display name
   const [isRegistering, setIsRegistering] = useState(false);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       if (isRegistering) {
         await register(email, password, name); // Pass name to the register function
-        showToast("Registration successful!", "success"); // Success message for registration
+        showToast(t("auth.registerSuccess"), "success");
       } else {
         await login(email, password);
-        showToast("Login successful!", "success"); // Success message for login
+        showToast(t("auth.loginSuccess"), "success");
       }
       navigate("/tasks");
     } catch (error) {
@@ -30,10 +32,8 @@ const Auth = () => {
         error
       );
       showToast(
-        isRegistering
-          ? "Registration failed. Please try again."
-          : "Login failed. Please check your credentials.",
-        "error" // Error message for failure
+        isRegistering ? t("auth.registerFail") : t("auth.loginFail"),
+        "error"
       );
     }
   };
@@ -41,11 +41,10 @@ const Auth = () => {
   const handleGoogleLogin = async () => {
     try {
       await signInWithGoogle();
-      showToast("Google login successful!", "success"); // Success message for Google login
+      showToast(t("auth.googleLoginSuccess"), "success");
       navigate("/tasks");
     } catch (error) {
-      console.error("Google login failed", error);
-      showToast("Google login failed. Please try again.", "error"); // Error message for Google login failure
+      showToast(t("auth.googleLoginFail"), "error");
     }
   };
 
@@ -56,12 +55,12 @@ const Auth = () => {
         className="bg-white dark:bg-gray-900 p-6 rounded-xl shadow-lg max-w-lg"
       >
         <h2 className="text-2xl font-bold mb-4 text-center dark:text-white">
-          {isRegistering ? "Register" : "Login"}
+          {isRegistering ? t("auth.registerTitle") : t("auth.loginTitle")}
         </h2>
         {isRegistering && (
           <input
             type="text"
-            placeholder="Name"
+            placeholder={t("auth.namePlaceholder")}
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full p-2 mb-6 border-b border-backAuth dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none"
@@ -70,7 +69,7 @@ const Auth = () => {
         )}
         <input
           type="email"
-          placeholder="Email"
+          placeholder={t("auth.emailPlaceholder")}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-2 mb-6 border-b border-backAuth dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none"
@@ -78,7 +77,7 @@ const Auth = () => {
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t("auth.passwordPlaceholder")}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="w-full p-2 mb-10 border-b border-backAuth dark:bg-gray-800 dark:border-gray-700 dark:text-white focus:outline-none"
@@ -89,7 +88,7 @@ const Auth = () => {
             type="submit"
             className="w-full bg-completed-text text-white p-2 rounded hover:text-completed-text hover:bg-completed-bg"
           >
-            {isRegistering ? "Register" : "Login"}
+            {isRegistering ? t("auth.registerButton") : t("auth.loginButton")}
           </button>
           <button
             type="button"
@@ -97,19 +96,19 @@ const Auth = () => {
             className="w-full flex gap-2 items-center bg-gray bg-opacity-25 text-black p-2 rounded hover:bg-opacity-40"
           >
             <FcGoogle size={22} />
-            {isRegistering ? "Register with Google" : "Login with Google"}
+            {isRegistering
+              ? t("auth.registerWithGoogle")
+              : t("auth.loginWithGoogle")}
           </button>
         </div>
         <p className="mt-4 text-center text-sm text-gray dark:text-gray-300">
-          {isRegistering
-            ? "Already have an account?"
-            : "Don't have an account?"}{" "}
+          {isRegistering ? t("auth.haveAccount") : t("auth.noAccount")}
           <button
             type="button"
             onClick={() => setIsRegistering(!isRegistering)}
             className="text-completed-text hover:underline"
           >
-            {isRegistering ? "Login" : "Register"}
+            {isRegistering ? t("auth.toggleLogin") : t("auth.toggleRegister")}
           </button>
         </p>
       </form>

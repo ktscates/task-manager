@@ -4,13 +4,13 @@ import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBB1zNtEDPbcaloxmJtZ4NrCDibC0dFxIk",
-  authDomain: "task-manager-9364a.firebaseapp.com",
-  projectId: "task-manager-9364a",
-  storageBucket: "task-manager-9364a.appspot.com",
-  messagingSenderId: "864657656752",
-  appId: "1:864657656752:web:968d3fb90d3aaba3cca475",
-  measurementId: "G-1LHGXB15LV",
+  apiKey: process.env.REACT_APP_API_KEY,
+  authDomain: process.env.REACT_APP_AUTH_DOMAIN,
+  projectId: process.env.REACT_APP_PROJECT_ID,
+  storageBucket: process.env.REACT_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.REACT_APP_MESSAGING_SENDER_ID,
+  appId: process.env.REACT_APP_APP_ID,
+  measurementId: process.env.REACT_APP_MEASUREMENT_ID,
 };
 
 // Initialize Firebase
@@ -18,5 +18,6 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); // Firestore instance
 const storage = getStorage(app); // Storage instance for images
+console.log(process.env.API_KEY);
 
 export { auth, db, storage };
