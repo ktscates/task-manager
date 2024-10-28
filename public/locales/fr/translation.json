@@ -1,0 +1,74 @@
+{
+  "header": {
+    "search_placeholder": "Rechercher",
+    "language_en": "EN",
+    "language_fr": "FR"
+  },
+
+  "taskNav": {
+    "allTasks": "Toutes les tâches",
+    "toDo": "À faire",
+    "inProgress": "En cours",
+    "completed": "Terminé",
+    "filterSort": "Filtrer & Trier",
+    "newTask": "Nouvelle tâche"
+  },
+
+  "taskModal": {
+    "editTask": "Modifier la tâche",
+    "newTask": "Nouvelle tâche",
+    "titlePlaceholder": "Titre",
+    "descriptionPlaceholder": "Description",
+    "imageLabel": "Image (Optionnel)",
+    "assignMembers": "Assigner des membres",
+    "selectMember": "Sélectionner un membre",
+    "assignedMembers": "Membres assignés:",
+    "status": {
+      "todo": "À faire",
+      "inProgress": "En cours",
+      "completed": "Terminé"
+    },
+    "comments": "Commentaires",
+    "addCommentPlaceholder": "Ajouter un commentaire",
+    "addCommentButton": "Ajouter un commentaire",
+    "cancelButton": "Annuler",
+    "saveButton": "Enregistrer",
+    "successMessage": {
+      "add": "Tâche ajoutée avec succès!",
+      "update": "Tâche mise à jour avec succès!"
+    },
+    "errorMessage": "Échec de l'enregistrement de la tâche. Veuillez réessayer."
+  },
+
+  "taskCard": {
+    "status": {
+      "todo": "À faire",
+      "inProgress": "En cours",
+      "completed": "Terminé"
+    },
+    "edit": "Modifier",
+    "delete": "Supprimer"
+  },
+
+  "auth": {
+    "registerSuccess": "Inscription réussie!",
+    "loginSuccess": "Connexion réussie!",
+    "registerFail": "Échec de l'inscription. Veuillez réessayer.",
+    "loginFail": "Échec de la connexion. Veuillez vérifier vos identifiants.",
+    "googleLoginSuccess": "Connexion Google réussie!",
+    "googleLoginFail": "Échec de la connexion Google. Veuillez réessayer.",
+    "registerTitle": "Inscription",
+    "loginTitle": "Connexion",
+    "namePlaceholder": "Nom",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mot de passe",
+    "registerButton": "Inscription",
+    "loginButton": "Connexion",
+    "registerWithGoogle": "S'inscrire avec Google",
+    "loginWithGoogle": "Se connecter avec Google",
+    "haveAccount": "Vous avez déjà un compte?",
+    "noAccount": "Pas de compte?",
+    "toggleRegister": "Inscription",
+    "toggleLogin": "Connexion"
+  }
+}

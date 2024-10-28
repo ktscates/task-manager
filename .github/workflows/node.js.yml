@@ -27,7 +27,7 @@ jobs:
           cache: "yarn"
       - run: yarn
       - run: yarn run build
-      - run: yarn run test
+      - run: yarn run test --config jest.config.js
 
     env:
       NETLIFY_AUTH_TOKEN: ${{ secrets.AUTH_ID }}
