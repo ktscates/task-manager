@@ -137,10 +137,8 @@ export const TaskProvider: React.FC<{ children: ReactNode }> = ({
     const taskSnapshot = await getDoc(taskDocRef);
     const currentTask = taskSnapshot.data() as Task;
 
-    // Add the new comment to the existing comments
     const updatedComments = [...(currentTask?.comments || []), comment];
 
-    // Update the task with the new comments array
     await updateDoc(taskDocRef, {
       comments: updatedComments,
     });

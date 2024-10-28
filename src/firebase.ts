@@ -18,6 +18,5 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app); // Firestore instance
 const storage = getStorage(app); // Storage instance for images
-console.log(process.env.API_KEY);
 
 export { auth, db, storage };

@@ -1,46 +1,74 @@
-# Getting Started with Create React App
+# Task Manager App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A Task Manager web application built with React, Firebase, TailwindCSS, and other modern web tools. The app supports user authentication, CRUD operations on tasks, search and filtering, a dark mode theme, and localization in English and French.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- **User Authentication** (Firebase)
+- **Task Management**: Creation, editing, deletion, and categorization
+- **Dark Mode** theme support
+- **Language Localization** (i18n) with English and French
+- **Toast Notifications** for user feedback
+- **Responsive Design** for mobile, tablet, and desktop
+- **Hosting on Netlify**
 
-### `npm start`
+## Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- **Frontend**: React, TailwindCSS, TypeScript
+- **Backend**: Firebase (Firestore and Authentication)
+- **Testing**: Jest, React Testing Library
+- **Deployment**: Netlify
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Getting Started
 
-### `npm test`
+### Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. **Clone the repository**:
 
-### `npm run build`
+   ```bash
+   git clone https://github.com/ktscates/task-manager.git
+   cd task-manager
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Install dependencies**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+   ```bash
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Running the App
 
-### `npm run eject`
+    ```bash
+    npm start
+    ```
+    Open your browser and navigate to `http://localhost:3000`.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## Testing
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+To run tests using Jest and React Testing Library:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm test --config jest.config.js
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-## Learn More
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Deployment
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Deploying on Netlify
+
+1. **Connect Repository**: In Netlify, connect this repository for continuous deployment.
+2. **Environment Variables**: In your Netlify project settings, go to **Site Settings > Environment Variables** and add each variable from your `.env` file.
+3. **Build Settings**:
+   - **Build Command**: `npm run build`
+   - **Publish Directory**: `build`
+
+Upon pushing changes to the connected branch, Netlify will automatically build and deploy the app.
+
+## Live Link
+
+You can access the deployed application at [Task manager](https://ktscates-task-manager.netlify.app).
+
+```
+
+```
